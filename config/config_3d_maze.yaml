@@ -1,0 +1,55 @@
+# 3D Maze 游戏数据集生成配置
+
+# 游戏类型
+game_type: "maze3d"
+
+# 输出根目录
+output_root: "generated_levels_maze3d"
+
+# 3D Maze 不需要皮肤
+# skins_root: ""
+
+# 难度配置
+# 每个难度对应不同的问题类型和网格大小
+difficulties:
+  # 路径查找问题 - 不同难度
+  easy:
+    qa_type: "path_finding"
+    grid_size: [6, 6, 5]  # [宽度, 深度, 高度]
+    max_attempts: 100
+    count: 120
+
+  medium:
+    qa_type: "path_finding"
+    grid_size: [8, 8, 7]
+    max_attempts: 100
+    count: 120
+
+  hard:
+    qa_type: "path_finding"
+    grid_size: [10, 10, 9]
+    max_attempts: 100
+    count: 120
+
+
+# 渲染颜色配置（支持 RGB 或 HEX 格式）
+# RGB 格式: [R, G, B] 例如 [68, 68, 255]
+# HEX 格式: "#RRGGBB" 例如 "#4444FF"
+colors:
+  start_pos: "#4444FF"      # 起点方块颜色（蓝色）
+  goal_pos: "#FF4444"       # 终点方块颜色（红色）
+  default_cube: "#888888"   # 默认方块颜色（灰色）
+  ball: "#FFD700"           # 球的颜色（金色）
+  ball_edge: "#FF8C00"      # 球的边缘颜色（深橙色）
+
+# 生成配置
+generation:
+  max_retries: 100
+  timeout_seconds: 30
+  fps: 24  # 视频帧率
+  generate_video: true  # 是否生成视频（设为 false 可大幅加快生成速度）
+
+# 并行配置
+parallel:
+  max_workers: 4
+

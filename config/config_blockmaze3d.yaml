@@ -1,0 +1,41 @@
+# BlockMaze3D 游戏数据集生成配置
+
+# 游戏类型
+game_type: "blockmaze3d"
+
+# 输出根目录
+output_root: "generated_levels_blockmaze3d"
+
+# BlockMaze3D 不需要皮肤（使用程序化渲染）
+# skins_root: ""
+
+# 难度配置
+difficulties:
+  easy:
+    difficulty: "easy"
+    max_attempts: 100
+    count: 10  # 生成 10 个简单关卡
+
+  medium:
+    difficulty: "medium"
+    max_attempts: 150
+    count: 10  # 生成 10 个中等关卡
+
+  hard:
+    difficulty: "hard"
+    max_attempts: 200
+    count: 10  # 生成 10 个困难关卡
+
+# 视频生成配置
+video:
+  fps: 24
+
+# 生成配置
+generation:
+  max_retries: 100
+  timeout_seconds: 60
+
+# 并行配置
+parallel:
+  max_workers: 4  # 可以根据 CPU 核心数调整
+

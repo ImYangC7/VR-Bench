@@ -1,0 +1,40 @@
+# TrapField 数据集生成配置
+
+# 游戏类型
+game_type: "trapfield"
+
+# 皮肤文件夹根目录
+skins_root: "skins/trapfield"
+
+# 输出根目录
+output_root: "generated_levels_trapfield"
+
+# TrapField 难度配置
+difficulties:
+  easy:
+    grid_size: 5          # 5x5 网格
+    trap_density: 0.2     # 20% 陷阱密度
+    max_attempts: 50      # 最大生成尝试次数
+    count: 120            # 生成数量
+
+  medium:
+    grid_size: 7         # 7x7 网格
+    trap_density: 0.3     # 30% 陷阱密度
+    max_attempts: 50
+    count: 120
+
+  hard:
+    grid_size: 11         # 11x11 网格
+    trap_density: 0.35    # 35% 陷阱密度
+    max_attempts: 50
+    count: 120
+
+# 生成配置
+generation:
+  fps: 24  # 固定24fps（连续移动动画）
+  max_duplicate_retries: 100
+
+# 并行配置
+parallel:
+  max_workers: 4
+

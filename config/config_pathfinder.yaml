@@ -1,0 +1,52 @@
+# PathFinder 游戏数据集生成配置
+
+# 游戏类型
+game_type: "pathfinder"
+
+# 输出根目录
+output_root: "generated_levels_pathfinder"
+
+# 皮肤根目录（PathFinder 不需要皮肤，但保留字段以兼容系统）
+
+skins_root: "skins/pathfinder"
+# 难度配置
+# 注意：难度通过多个因素综合区分
+# - 图片尺寸：图片越大，视觉范围越大
+# - 道路宽度：道路越窄，越难控制
+# - 节点密度：节点越密集，路径网络越复杂
+# - 支路数量：支路越多，干扰项越多
+# - 最短路径：要求的路径越长，难度越高
+# 实际配置在 games/pathfinder/constants.py 中的 DIFFICULTY_CONFIG
+difficulties:
+  easy:
+    difficulty: "easy"      # 难度名称
+    # 512x512, 30px道路, 稀疏节点(18%), 1条支路, 4节点路径
+    max_attempts: 50        # 最大生成尝试次数
+    count: 120              # 生成数量
+
+  medium:
+    difficulty: "medium"
+    # 768x768, 22px道路, 中等节点(15%), 3条支路, 6节点路径
+    max_attempts: 50
+    count: 120
+
+  hard:
+    difficulty: "hard"
+    # 1024x1024, 18px道路, 密集节点(12%), 5条支路, 8节点路径
+    max_attempts: 50
+    count: 120
+
+# 视频生成配置
+video:
+  fps: 24                    # 视频帧率（会被 constants.py 中的配置覆盖）
+  add_grid: false           # 是否添加网格（PathFinder 不适用）
+
+# 生成配置
+generation:
+  max_retries: 100          # 单个关卡最大重试次数
+  timeout_seconds: 30       # 单个关卡生成超时时间
+
+# 并行配置
+parallel:
+  max_workers: 12           # 并行工作进程数
+

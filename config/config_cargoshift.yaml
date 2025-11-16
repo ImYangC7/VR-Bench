@@ -1,0 +1,41 @@
+# CargoShift 游戏数据集生成配置
+
+# 游戏类型
+game_type: "cargoshift"
+
+# 输出根目录
+output_root: "generated_levels_cargoshift"
+
+# CargoShift 不需要皮肤
+# skins_root: ""
+
+# 难度配置
+difficulties:
+  easy:
+    difficulty: "easy"
+    max_attempts: 50
+    count: 5  # 演示用
+
+  medium:
+    difficulty: "medium"
+    max_attempts: 100
+    count: 5  # 演示用
+
+  hard:
+    difficulty: "hard"
+    max_attempts: 200
+    count: 5  # 演示用
+
+# 视频生成配置
+video:
+  fps: 30
+
+# 生成配置
+generation:
+  max_retries: 100
+  timeout_seconds: 30
+
+# 并行配置
+parallel:
+  max_workers: 2  # 减少并行数避免内存问题
+

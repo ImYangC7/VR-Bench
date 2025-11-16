@@ -1,0 +1,77 @@
+# 统一数据集生成配置
+# 支持多种游戏类型：sokoban, maze, pathfinder, trapfield
+
+# 游戏类型 (sokoban, maze, pathfinder, trapfield)
+game_type: "sokoban"
+
+# 皮肤文件夹根目录
+skins_root: "skins/sokoban/new"
+
+# 输出根目录
+output_root: "generated_levels"
+
+# 难度配置
+# Sokoban 难度配置
+difficulties:
+  easy:
+    board_size: 5
+    num_boxes: 1
+    count: 120
+
+  medium:
+    board_size: 8
+    num_boxes: 1
+    count: 120
+
+  hard:
+    board_size: 12
+    num_boxes: 1
+    count: 120
+
+# Maze 难度配置（切换 game_type 为 maze 时使用）
+# game_type: "maze"
+# skins_root: "skins/maze"
+# difficulties:
+#   small:
+#     maze_size: 9
+#     count: 120
+#
+#   medium:
+#     maze_size: 11
+#     count: 120
+#
+#   large:
+#     maze_size: 13
+#     count: 120
+
+# PathFinder 难度配置（切换 game_type 为 pathfinder 时使用）
+# game_type: "pathfinder"
+# skins_root: "skins/pathfinder"
+# difficulties:
+#   easy:
+#     difficulty: "easy"
+#     image_size: 1024
+#     count: 120
+#
+#   medium:
+#     difficulty: "medium"
+#     image_size: 1024
+#     count: 120
+#
+#   hard:
+#     difficulty: "hard"
+#     image_size: 1024
+#     count: 120
+
+# 生成配置
+generation:
+  check_solvable: true
+  max_attempts: 50
+  fps: 24  # 固定24fps（连续移动动画）
+  add_grid: false
+  max_duplicate_retries: 100
+
+# 并行配置
+parallel:
+  max_workers: 4
+

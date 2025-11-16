@@ -1,0 +1,28 @@
+game: pathfinder
+dataset: dataset/irregular_maze/1
+output: vlm_eval_results/irregular_maze
+
+models:
+  # 使用 SGLang 服务（先运行 bash scripts/start_sglang_server.sh）
+  # - name: Qwen/Qwen2.5-VL-7B-Instruct
+  #   type: api
+  #   base_url: http://localhost:8123/v1
+  #   max_tokens: 10000
+  #   temperature: 1.0
+
+  # API 模型示例
+  - name: gpt-5
+    type: api
+    base_url: https://newapi.deepwisdom.ai/v1
+    max_tokens: 60000
+    temperature: 1.0
+  - name: gemini-2.5-pro
+    type: api
+    base_url: https://newapi.deepwisdom.ai/v1
+    max_tokens: 60000
+    temperature: 1.0
+
+workers: 10
+max_levels: -1
+assets_folder: skins/pathfinder/1
+

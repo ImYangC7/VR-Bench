@@ -1,0 +1,33 @@
+# Maze 数据集生成配置
+
+# 游戏类型
+game_type: "maze"
+
+# 皮肤文件夹根目录
+skins_root: "skins/maze/new"
+# 输出根目录
+output_root: "generated_levels_maze"
+
+# Maze 难度配置
+difficulties:
+  easy:
+    maze_size: 7
+    count: 120
+
+  medium:
+    maze_size: 11
+    count: 120
+
+  hard:
+    maze_size: 15
+    count: 120
+
+# 生成配置
+generation:
+  fps: 24  # 固定24fps（连续移动动画）
+  max_duplicate_retries: 100
+
+# 并行配置
+parallel:
+  max_workers: 4
+

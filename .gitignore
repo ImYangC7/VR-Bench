@@ -1,0 +1,97 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+pip-wheel-metadata/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+bak_dataset/
+dataset/
+vlm_eval_results/
+huggingface_model/
+bak/
+# Virtual Environment
+venv/
+ENV/
+env/
+.venv
+.env
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Jupyter Notebook
+.ipynb_checkpoints
+*.ipynb
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+.nox/
+
+# Logs
+*.log
+logs/
+*.out
+
+# Dataset and Generated Files
+dataset/
+dataset_*/
+bak_dataset/
+debug/
+output/
+eval_results/
+*.mp4
+*.avi
+*.gif
+*.png
+*.jpg
+*.jpeg
+
+# Temporary Files
+tmp/
+temp/
+*.tmp
+*.bak
+*.swp
+
+# Model Checkpoints
+checkpoints/
+*.pth
+*.pt
+*.ckpt
+*.h5
+
+# Cache
+.cache/
+*.cache
+
+# OS
+Thumbs.db
+.DS_Store
+
+#dataset
+dataset_VR
