@@ -4,6 +4,16 @@
 
 VR-Bench is a comprehensive benchmark for evaluating Vision-Language Models (VLMs) on spatial reasoning and planning tasks through various puzzle games. It provides a unified framework for dataset generation, evaluation, and analysis.
 
+## 🧩 Benchmark Overview
+
+Overview of VR-Bench. (A) Maze Types. VR-Bench comprises five maze types—Regular Maze, Irregular Maze, 3D Maze, Trapfield, and Sokoban—covering both 2D and 3D settings as well as diverse task structures, yielding a broad range of spatial reasoning scenarios. (B) Reasoning via Video Paradigm. VR-Bench adopts a chain-of-frame reasoning paradigm, requiring models to produce frame-by-frame inferences that capture sequential visual reasoning. (C) Benchmark Performance. Leading VLMs and video models are evaluated on four core metrics across all maze types, revealing clear differences in spatial reasoning capability. (D) Additional Analysis. VR-Bench also supports evaluations on difficulty generalization, texture generalization, maze-type generalization, and test-time scaling, enabling a comprehensive assessment of model robustness and generalization.
+
+[video reason.pdf](VR-Bench/resource/video reason.pdf)
+
+To evaluate the generalization ability on the VTR task and enhance robustness in adapting to diverse maze scenarios, we introduce variations across two key dimensions: (1) **Difficulty Level**: We define three difficulty grades (Easy, Medium, and Hard) by adjusting the maze size (e.g., expanding from 5×5 to 7×7), modifying the number of maze branches, and adding obstacles; (2) **Maze Texture**: We vary the textures of maze obstacles, paths, and other components using textures generated via procedural methods and generative models, which exposes the policies to a broad visual distribution and mitigates overfitting to clean, synthetic environments.
+
+[variant.pdf](VR-Bench/resource/variant.pdf)
+
 ## 🎮 Supported Games
 
 VR-Bench includes five different puzzle games, each testing different aspects of visual reasoning:
