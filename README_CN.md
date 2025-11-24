@@ -59,7 +59,7 @@ VR-Bench 包含五种不同的益智游戏，每种游戏测试视觉推理的�
 
 ```bash
 # 克隆仓库
-git clone https://github.com/SNHuan/VR-Bench.git
+git clone https://github.com/ImYangC7/VR-Bench.git
 cd VR-Bench
 
 # 安装依赖

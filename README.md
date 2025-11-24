@@ -59,7 +59,7 @@ VR-Bench includes five different puzzle games, each testing different aspects of
 
 ```bash
 # Clone the repository
-git clone https://github.com/SNHuan/VR-Bench.git
+git clone https://github.com/ImYangC7/VR-Bench.git
 cd VR-Bench
 
 # Install dependencies
