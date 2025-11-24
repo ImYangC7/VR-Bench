@@ -118,11 +118,11 @@ def evaluate_single_video(args_tuple: Tuple) -> Dict[str, Any]:
                     gen_box_traj=gen_box_traj
                 )
 
-                # 计算综合得分 (PR - |Step|)
-                # Step 可能为 None（当 SR=0 时）
-                step_value = result['step']
-                if step_value is not None:
-                    score = result['pr'] - abs(step_value)
+                # 计算综合得分 (PR - |SD|)
+                # SD 可能为 None（当 SR=0 时）
+                sd_value = result['sd']
+                if sd_value is not None:
+                    score = result['pr'] - abs(sd_value)
                 else:
                     score = result['pr']
 
@@ -155,10 +155,10 @@ def evaluate_single_video(args_tuple: Tuple) -> Dict[str, Any]:
         if frame_to_use is not None:
             metrics = {
                 'pr': best_result['pr'],
-                'step': best_result['step'],
+                'sd': best_result['sd'],
                 'sr': best_result.get('sr', 0.0),
                 'em': best_result['em'],
-                'fidelity': best_result.get('fidelity', 0.0)
+                'mf': best_result.get('mf', 0.0)
             }
 
             player_bbox = state.get_player_bbox()
@@ -211,16 +211,16 @@ def evaluate_single_video(args_tuple: Tuple) -> Dict[str, Any]:
             )
 
         # 返回结果
-        # step 可能为 None（当 SR<1 时）
-        step_value = best_result['step']
+        # SD 可能为 None（当 SR<1 时）
+        sd_value = best_result['sd']
         return {
             'video': gen_path.name,
             'status': 'success',
             'pr': float(best_result['pr']),
-            'step': float(step_value) if step_value is not None else None,
+            'sd': float(sd_value) if sd_value is not None else None,
             'em': float(best_result['em']),
             'sr': float(best_result.get('sr', 0.0)),
-            'fidelity': float(best_result.get('fidelity', 0.0)),
+            'mf': float(best_result.get('mf', 0.0)),
             'is_perfect': bool(best_result['is_perfect']),
             'gt_length': float(best_result['gt_length']),
             'gen_length': float(best_result['gen_length']),
@@ -267,10 +267,10 @@ def evaluate_difficulty(dataset_dir: str, output_dir: str, result_dir: str,
     
     # 统计数据
     all_prs = []
-    all_steps = []
+    all_sds = []
     all_perfect = []
     all_srs = []
-    all_fidelities = []
+    all_mfs = []
     results_list = []
     completed = 0
 
@@ -285,17 +285,17 @@ def evaluate_difficulty(dataset_dir: str, output_dir: str, result_dir: str,
 
             if result['status'] == 'success':
                 all_prs.append(result['pr'])
-                # Step 只在 SR=1 时有值，其他情况为 None
-                step_value = result['step']
-                if step_value is not None:
-                    all_steps.append(step_value)
+                # SD 只在 SR=1 时有值，其他情况为 None
+                sd_value = result['sd']
+                if sd_value is not None:
+                    all_sds.append(sd_value)
                 all_perfect.append(result['is_perfect'])
                 all_srs.append(result.get('sr', 0.0))
-                all_fidelities.append(result.get('fidelity', 0.0))
+                all_mfs.append(result.get('mf', 0.0))
 
                 # 计算 score 时处理 None
-                if step_value is not None:
-                    score = result.get('score', result['pr'] - abs(step_value))
+                if sd_value is not None:
+                    score = result.get('score', result['pr'] - abs(sd_value))
                 else:
                     score = result.get('score', result['pr'])
 
@@ -304,11 +304,11 @@ def evaluate_difficulty(dataset_dir: str, output_dir: str, result_dir: str,
                 sr = result.get('sr', 0.0)
 
                 # 打印时处理 None
-                step_str = f"{step_value:.3f}" if step_value is not None else "N/A"
-                fidelity_value = result.get('fidelity', 0.0)
+                sd_str = f"{sd_value:.3f}" if sd_value is not None else "N/A"
+                mf_value = result.get('mf', 0.0)
                 print(f"  [{completed}/{len(gen_videos)}] {result['video']}: "
-                      f"PR={result['pr']:.3f}, Step={step_str}, SR={sr:.0f}, "
-                      f"Fidelity={fidelity_value:.3f}, Score={score:.3f}, Perfect={result['is_perfect']}, "
+                      f"PR={result['pr']:.3f}, SD={sd_str}, SR={sr:.0f}, "
+                      f"MF={mf_value:.3f}, Score={score:.3f}, Perfect={result['is_perfect']}, "
                       f"Best_GT={best_gt}, Num_GT={num_gt}")
             else:
                 print(f"  [{completed}/{len(gen_videos)}] {result['video']}: ERROR - {result['error']}")
@@ -318,18 +318,18 @@ def evaluate_difficulty(dataset_dir: str, output_dir: str, result_dir: str,
     sr = sum(all_srs) / len(all_srs) if all_srs else 0.0
 
     # 统计数据
-    # avg_step 只计算 SR=1 的样本（all_steps 中只包含非 None 的值）
+    # avg_sd 只计算 SR=1 的样本（all_sds 中只包含非 None 的值）
     summary = {
         'difficulty': difficulty,
         'total_videos': len(gen_videos),
         'successful': len(all_prs),
         'failed': len(gen_videos) - len(all_prs),
         'avg_pr': float(np.mean(all_prs)) if all_prs else 0.0,
-        'avg_step': float(np.mean(all_steps)) if all_steps else 0.0,  # 只包含 SR=1 的样本
-        'step_count': len(all_steps),  # 有多少个样本计算了 step（即 SR=1 的数量）
+        'avg_sd': float(np.mean(all_sds)) if all_sds else 0.0,  # 只包含 SR=1 的样本
+        'sd_count': len(all_sds),  # 有多少个样本计算了 sd（即 SR=1 的数量）
         'em': float(em),
         'sr': float(sr),
-        'fidelity': float(np.mean(all_fidelities)) if all_fidelities else 0.0,
+        'mf': float(np.mean(all_mfs)) if all_mfs else 0.0,
         'perfect_count': sum(all_perfect),
         'perfect_ratio': float(em),
         'success_count': int(sum(all_srs)),
@@ -341,8 +341,8 @@ def evaluate_difficulty(dataset_dir: str, output_dir: str, result_dir: str,
     with open(results_file, 'w', encoding='utf-8') as f:
         json.dump({'summary': summary, 'results': results_list}, f, indent=2, ensure_ascii=False)
 
-    print(f"  PR={summary['avg_pr']:.3f}, Step={summary['avg_step']:.3f} (n={summary['step_count']}), "
-          f"EM={summary['em']:.3f}, SR={summary['sr']:.3f}, Fidelity={summary.get('fidelity', 0.0):.3f}, "
+    print(f"  PR={summary['avg_pr']:.3f}, SD={summary['avg_sd']:.3f} (n={summary['sd_count']}), "
+          f"EM={summary['em']:.3f}, SR={summary['sr']:.3f}, MF={summary.get('mf', 0.0):.3f}, "
           f"Perfect={summary['perfect_count']}/{summary['successful']}")
     print(f"  Results: {results_file}")
 
@@ -431,7 +431,7 @@ def main():
         total_perfect = sum(s['perfect_count'] for s in all_summaries)
         total_success = sum(s.get('success_count', 0) for s in all_summaries)
         avg_pr = np.mean([s['avg_pr'] for s in all_summaries])
-        avg_step = np.mean([s['avg_step'] for s in all_summaries])
+        avg_sd = np.mean([s['avg_sd'] for s in all_summaries])
         avg_em = np.mean([s['em'] for s in all_summaries])
         avg_sr = np.mean([s.get('sr', 0.0) for s in all_summaries])
 
@@ -440,11 +440,10 @@ def main():
         print(f"Perfect paths: {total_perfect}")
         print(f"Success paths (reached goal): {total_success}")
         print(f"Average PR: {avg_pr:.3f}")
-        print(f"Average Step: {avg_step:.3f}")
+        print(f"Average SD: {avg_sd:.3f}")
         print(f"Average EM: {avg_em:.3f}")
         print(f"Average SR: {avg_sr:.3f}")
 
 
 if __name__ == '__main__':
     main()
-

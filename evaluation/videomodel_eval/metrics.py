@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+﻿#!/usr/bin/env python3
 import numpy as np
 from typing import Dict, Any, Tuple
 
@@ -118,7 +118,7 @@ class PrecisionRateMetric(BaseMetric):
 class StepMetric(BaseMetric):
     @property
     def name(self):
-        return "step"
+        return "sd"
     def compute(self, gt_traj, gen_traj, **kwargs):
         # Step 只在 SR=1 时计算
         sr = kwargs.get("sr", 0.0)
@@ -151,11 +151,11 @@ class ExactMatchMetric(BaseMetric):
             return 0.0, {"is_perfect": False}
 
         pr = kwargs.get("pr", 0.0)
-        step = kwargs.get("step", 0.0)
-        # 处理 step=None 的情况（当 SR<1 时）
-        if step is None:
-            step = 0.0
-        is_perfect = (pr >= self.pr_threshold) and (abs(step) <= self.step_threshold)
+        sd = kwargs.get("sd", 0.0)
+        # 处理 sd=None 的情况（当 SR<1 时）
+        if sd is None:
+            sd = 0.0
+        is_perfect = (pr >= self.pr_threshold) and (abs(sd) <= self.step_threshold)
         return float(is_perfect), {"is_perfect": is_perfect}
 
 
@@ -183,3 +183,4 @@ class SuccessRateMetric(BaseMetric):
         reached = bool(np.any(in_bbox))
 
         return float(reached), {"reached_goal": reached}
+

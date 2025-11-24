@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+﻿#!/usr/bin/env python3
 import sys
 from pathlib import Path
 sys.path.insert(0, str(Path(__file__).parent.parent))
@@ -144,11 +144,13 @@ class TrajectoryEvaluator:
         """返回空结果"""
         return {
             'pr': 0.0,
-            'step': 0.0,
+            'sd': 0.0,
             'em': 0.0,
             'sr': 0.0,
+            'mf': 0.0,
             'gt_length': 0.0,
             'gen_length': 0.0,
             'is_perfect': False
         }
+
 

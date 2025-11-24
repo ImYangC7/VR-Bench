@@ -195,17 +195,17 @@ def draw_trajectory_comparison(
     except:
         font = ImageFont.load_default()
     
-    # 处理 step 可能为 None 的情况
-    step_value = metrics.get('step')
-    step_str = f"{step_value:.3f}" if step_value is not None else "N/A"
+    # 处理 sd 可能为 None 的情况
+    sd_value = metrics.get('sd')
+    sd_str = f"{sd_value:.3f}" if sd_value is not None else "N/A"
 
     text_lines = [
         f"Video: {title}",
         f"PR: {metrics.get('pr', 0):.3f}",
-        f"Step: {step_str}",
+        f"SD: {sd_str}",
         f"SR: {metrics.get('sr', 0):.3f}",
         f"EM: {metrics.get('em', 0):.3f}",
-        f"Fidelity: {metrics.get('fidelity', 0):.3f}"
+        f"MF: {metrics.get('mf', 0):.3f}"
     ]
     
     y_offset = 10
@@ -281,4 +281,3 @@ def find_state_file(dataset_dir: Path, gen_video_name: str) -> Optional[str]:
         return str(state_files[0])
 
     return None
-
