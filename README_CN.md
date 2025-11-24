@@ -171,6 +171,64 @@ python -m evaluation.vlm_eval.run_vlm_eval config/vlm/sokoban_eval.yaml
 ### VLM 指标（vlm_eval）
 - **SR / PR / MR / Step**：成功率、路径正确性、匹配率和步数（由 VLM 评估器定义）。
 
+## 🏋️‍♂️ 训练模型
+
+我们使用 [DiffSynth-Studio](https://github.com/modelscope/DiffSynth-Studio) 进行扩散模型的训练和推理。安装方法：
+
+```bash
+git clone https://github.com/modelscope/DiffSynth-Studio.git
+cd DiffSynth-Studio
+pip install -e .
+```
+
+安装完成后，**确保在启动实验前更新训练脚本中的数据集路径、超参数和输出目录**。
+
+参考配置如下：
+
+```bash
+accelerate launch examples/wanvideo/model_training/train.py \
+  --dataset_base_path data/example_video_dataset \
+  --dataset_metadata_path data/example_video_dataset/metadata.csv \
+  --height 512 \
+  --width 512 \
+  --num_frames 193 \
+  --dataset_repeat 100 \
+  --model_id_with_origin_paths "Wan-AI/Wan2.2-TI2V-5B:diffusion_pytorch_model*.safetensors,Wan-AI/Wan2.2-TI2V-5B:models_t5_umt5-xxl-enc-bf16.pth,Wan-AI/Wan2.2-TI2V-5B:Wan2.2_VAE.pth" \
+  --learning_rate 1e-4 \
+  --num_epochs 5 \
+  --remove_prefix_in_ckpt "pipe.dit." \
+  --output_path "./models/train/Wan2.2-TI2V-5B_lora" \
+  --lora_base_model "dit" \
+  --lora_target_modules "q,k,v,o,ffn.0,ffn.2" \
+  --lora_rank 32 \
+  --extra_inputs "input_image" 
+```
+
+请根据您的具体数据位置编辑上述脚本。
+
+## 🧪 评测
+
+训练完模型后，您可以使用我们提供的推理脚本进行评测：
+
+1. **复制推理脚本**：将评测脚本从 VR-Bench 复制到 DiffSynth-Studio：
+   ```bash
+   cp VR-Bench/scripts/Wan2.2-TI2V-5B_lora.py DiffSynth-Studio/examples/wanvideo/model_inference/
+   ```
+
+2. **更新路径**：编辑复制的脚本，根据您的设置更新路径：
+   - 更新 LoRA 检查点路径
+   - 更新输入图像路径
+   - 更新输出视频路径
+   - 根据需要自定义提示词
+
+3. **运行评测**：
+   ```bash
+   cd DiffSynth-Studio/examples/wanvideo/model_inference/
+   python Wan2.2-TI2V-5B_lora.py
+   ```
+
+脚本将基于您训练的模型生成视频，并保存到指定的输出目录。
+
 ## 🔧 配置
 
 ### 生成配置（`config/config.yaml`）
