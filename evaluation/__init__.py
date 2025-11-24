@@ -1,12 +1,11 @@
-"""评估系统 - 包含数据集评估和VLM评估"""
-
+"""评估系统 - 包含视频模型评估和VLM评估"""
 from . import vlm_eval
-from . import dataset_eval
+from . import videomodel_eval
 
-# 为了向后兼容，保留旧的导入路径
-from evaluation.dataset_eval.extractor import TrajectoryExtractor
-from evaluation.dataset_eval.evaluator import TrajectoryEvaluator
-from evaluation.dataset_eval.metrics import (
+# 为了向后兼容，从videomodel_eval导出
+from evaluation.videomodel_eval.extractor import TrajectoryExtractor
+from evaluation.videomodel_eval.evaluator import TrajectoryEvaluator
+from evaluation.videomodel_eval.metrics import (
     PrecisionRateMetric,
     StepMetric,
     ExactMatchMetric,
@@ -17,8 +16,7 @@ from evaluation.dataset_eval.metrics import (
 
 __all__ = [
     'vlm_eval',
-    'dataset_eval',
-    # 向后兼容
+    'videomodel_eval',
     'TrajectoryExtractor',
     'TrajectoryEvaluator',
     'PrecisionRateMetric',
