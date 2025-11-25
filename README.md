@@ -81,6 +81,41 @@ python dataset_init.py --output-dir ./dataset_VR
 python -m generation.batch_generate config/config.yaml
 ```
 
+## 🏋️‍♂️ Training Models
+
+We use [DiffSynth-Studio](https://github.com/modelscope/DiffSynth-Studio) for diffusion model training and inference. To install:
+
+```bash
+git clone https://github.com/modelscope/DiffSynth-Studio.git
+cd DiffSynth-Studio
+pip install -e .
+```
+
+After installation, **make sure to update your dataset paths, hyperparameters, and output directory in the training script** before launching your experiment.
+
+Here is a reference configuration:
+
+```bash
+accelerate launch examples/wanvideo/model_training/train.py \
+  --dataset_base_path data/example_video_dataset \
+  --dataset_metadata_path data/example_video_dataset/metadata.csv \
+  --height 512 \
+  --width 512 \
+  --num_frames 193 \
+  --dataset_repeat 100 \
+  --model_id_with_origin_paths "Wan-AI/Wan2.2-TI2V-5B:diffusion_pytorch_model*.safetensors,Wan-AI/Wan2.2-TI2V-5B:models_t5_umt5-xxl-enc-bf16.pth,Wan-AI/Wan2.2-TI2V-5B:Wan2.2_VAE.pth" \
+  --learning_rate 1e-4 \
+  --num_epochs 5 \
+  --remove_prefix_in_ckpt "pipe.dit." \
+  --output_path "./models/train/Wan2.2-TI2V-5B_lora" \
+  --lora_base_model "dit" \
+  --lora_target_modules "q,k,v,o,ffn.0,ffn.2" \
+  --lora_rank 32 \
+  --extra_inputs "input_image" 
+```
+
+Edit the script above with your specific data locations.
+
 ## 🎯 Evaluation Method
 
 ### Video models (trajectory reasoning)
@@ -118,41 +153,6 @@ bash scripts/run_vlm_eval.sh
 - **SD (Step Deviation)**: Relative path-length overrun vs GT (`len_gen / len_gt - 1`), only defined when SR=1 and non-negative.
 - **EM (Exact Match)**: Perfect flag (1/0) when PR exceeds a threshold and |SD| is small, conditioned on SR=1.
 - **MF (Mask Fidelity)**: Background stability score [0,1]; compares sampled frames to the first frame while masking start/goal/player regions.
-
-## 🏋️‍♂️ Training Models
-
-We use [DiffSynth-Studio](https://github.com/modelscope/DiffSynth-Studio) for diffusion model training and inference. To install:
-
-```bash
-git clone https://github.com/modelscope/DiffSynth-Studio.git
-cd DiffSynth-Studio
-pip install -e .
-```
-
-After installation, **make sure to update your dataset paths, hyperparameters, and output directory in the training script** before launching your experiment.
-
-Here is a reference configuration:
-
-```bash
-accelerate launch examples/wanvideo/model_training/train.py \
-  --dataset_base_path data/example_video_dataset \
-  --dataset_metadata_path data/example_video_dataset/metadata.csv \
-  --height 512 \
-  --width 512 \
-  --num_frames 193 \
-  --dataset_repeat 100 \
-  --model_id_with_origin_paths "Wan-AI/Wan2.2-TI2V-5B:diffusion_pytorch_model*.safetensors,Wan-AI/Wan2.2-TI2V-5B:models_t5_umt5-xxl-enc-bf16.pth,Wan-AI/Wan2.2-TI2V-5B:Wan2.2_VAE.pth" \
-  --learning_rate 1e-4 \
-  --num_epochs 5 \
-  --remove_prefix_in_ckpt "pipe.dit." \
-  --output_path "./models/train/Wan2.2-TI2V-5B_lora" \
-  --lora_base_model "dit" \
-  --lora_target_modules "q,k,v,o,ffn.0,ffn.2" \
-  --lora_rank 32 \
-  --extra_inputs "input_image" 
-```
-
-Edit the script above with your specific data locations.
 
 ## 🧪 Evaluation
 
