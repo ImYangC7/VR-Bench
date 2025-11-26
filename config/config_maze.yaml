@@ -4,9 +4,9 @@
 game_type: "maze"
 
 # 皮肤文件夹根目录
-skins_root: "skins/maze/new"
+skins_root: "skins/maze"
 # 输出根目录
-output_root: "generated_levels_maze"
+output_root: "dataset_output/generated_levels_maze"
 
 # Maze 难度配置
 difficulties:
