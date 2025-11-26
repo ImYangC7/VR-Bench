@@ -71,6 +71,10 @@ eval_results/
 *.jpg
 *.jpeg
 
+# But include skins folder
+!skins/
+!skins/**
+
 # Temporary Files
 tmp/
 temp/
