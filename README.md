@@ -44,11 +44,11 @@ To evaluate the generalization ability on the VTR task and enhance robustness in
 
 VR-Bench includes five different puzzle games, each testing different aspects of visual reasoning:
 
-- **Maze**: Navigate from start to goal in a grid-based maze
-- **Sokoban**: Push boxes to target positions while avoiding walls
-- **3D Maze**: Multi-level maze with ladders connecting different floors
-- **PathFinder**: Find paths through irregular mazes with labeled waypoints
-- **TrapField**: Navigate through a field while avoiding traps
+- **Regular Maze**: Basic spatial navigation and path planning in grid-based mazes
+- **Sokoban**: Push boxes to target positions, requiring understanding of object interactions and push mechanics (highest logical difficulty)
+- **3D Maze**: Multi-level maze with height and occlusion, testing reasoning ability in 3D space
+- **PathFinder (Irregular Maze)**: Navigate through irregular mazes with curved paths, testing pure visual perception without coordinate memory
+- **TrapField**: Navigate from start to goal while avoiding specific trap regions, testing constraint-based reasoning
 
 ## ✨ Key Features
 
@@ -56,7 +56,7 @@ VR-Bench includes five different puzzle games, each testing different aspects of
 - **Texture Customization**: Support for custom visual themes through texture skins
 - **Video Rendering**: Generate solution videos with smooth animations (24 FPS)
 - **VLM Evaluation**: Built-in framework for testing various VLMs (GPT, Gemini, Qwen, etc.)
-- **Comprehensive Metrics**: Success Rate (SR), Path Ratio (PR), Move Ratio (MR)
+- **Comprehensive Metrics**: SR (Success Rate), PR (Precision Rate), SD (Step Deviation), EM (Exact Match), MF (Mask Fidelity)
 - **Parallel Processing**: Multi-threaded generation and evaluation for efficiency
 - **Deduplication**: Automatic detection and removal of duplicate levels
 
