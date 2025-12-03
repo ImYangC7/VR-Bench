@@ -25,6 +25,7 @@ VR-Bench is a comprehensive benchmark for evaluating Vision-Language Models (VLM
 ## 🎊 News
 
 - [2025.12.03] Refactored tracker code for improved standardization and added comprehensive tracker documentation (NCC, Optical Flow, CSRT) with usage examples.
+> **📝 Note on Paper Reproduction**: The results in our paper were obtained using **CSRT tracker**. If you want to exactly reproduce the paper results, use `--tracker-type csrt`. However, we recommend **NCC tracker** for general use as it provides more stable and accurate trajectory extraction in puzzle game scenarios.
 - [2025.11.26] We apologize for the earlier omission. We have now added all our current maze textures to the skin folder to enable normal generation. In future releases, we will use nanobanana to support automatic skin generation. Please follow our updates.
 - [2025.11.24] We have released the training scripts and corresponding configurations used to train Wan-R1.
 - [2025.11.19] We have released evaluation code for all tasks.
@@ -199,7 +200,6 @@ The trajectory extraction system supports three tracking algorithms, selectable 
 - **Cons**: May occasionally lose target in maze environments (e.g., Sokoban), slower, requires `opencv-contrib-python`
 - **Best for**: General-purpose tracking with appearance changes
 
-> **📝 Note on Paper Reproduction**: The results in our paper were obtained using **CSRT tracker**. If you want to exactly reproduce the paper results, use `--tracker-type csrt`. However, we recommend **NCC tracker** for general use as it provides more stable and accurate trajectory extraction in puzzle game scenarios.
 
 **Usage Examples**:
 
