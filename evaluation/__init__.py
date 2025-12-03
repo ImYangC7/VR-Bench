@@ -2,8 +2,8 @@
 from . import vlm_eval
 from . import videomodel_eval
 
-# 为了向后兼容，从videomodel_eval导出
-from evaluation.videomodel_eval.extractor import TrajectoryExtractor
+# 从videomodel_eval导出
+from evaluation.videomodel_eval.extractor import CSRTTracker
 from evaluation.videomodel_eval.evaluator import TrajectoryEvaluator
 from evaluation.videomodel_eval.metrics import (
     PrecisionRateMetric,
@@ -17,7 +17,7 @@ from evaluation.videomodel_eval.metrics import (
 __all__ = [
     'vlm_eval',
     'videomodel_eval',
-    'TrajectoryExtractor',
+    'CSRTTracker',
     'TrajectoryEvaluator',
     'PrecisionRateMetric',
     'StepMetric',

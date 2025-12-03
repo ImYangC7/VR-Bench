@@ -1,5 +1,5 @@
 from .evaluator import TrajectoryEvaluator
-from .extractor import TrajectoryExtractor
+from .extractor import CSRTTracker
 from .metrics import (
     PrecisionRateMetric,
     StepMetric,
@@ -12,7 +12,7 @@ from .utils import get_video_info, draw_trajectory_comparison
 
 __all__ = [
     'TrajectoryEvaluator',
-    'TrajectoryExtractor',
+    'CSRTTracker',
     'PrecisionRateMetric',
     'StepMetric',
     'ExactMatchMetric',

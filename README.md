@@ -22,8 +22,9 @@ VR-Bench is a comprehensive benchmark for evaluating Vision-Language Models (VLM
 
 ![](https://raw.githubusercontent.com/ImYangC7/Repo-recorder/main/generated/ImYangC7__VR-Bench_status.svg)
 
-## 🎊 News 
+## 🎊 News
 
+- [2025.12.03] Refactored tracker code for improved standardization and added comprehensive tracker documentation (NCC, Optical Flow, CSRT) with usage examples.
 - [2025.11.26] We apologize for the earlier omission. We have now added all our current maze textures to the skin folder to enable normal generation. In future releases, we will use nanobanana to support automatic skin generation. Please follow our updates.
 - [2025.11.24] We have released the training scripts and corresponding configurations used to train Wan-R1.
 - [2025.11.19] We have released evaluation code for all tasks.
@@ -168,6 +169,55 @@ bash scripts/videomodel_evaluate.sh
 python evaluation/videomodel_eval/batch_evaluate.py \
   DATASET_DIR OUTPUT_DIR RESULT_DIR \   # DATASET_DIR=GT dataset root, OUTPUT_DIR=model outputs, RESULT_DIR=eval outputs
   --gpu   # optional
+```
+
+#### Tracker Types
+
+The trajectory extraction system supports three tracking algorithms, selectable via `--tracker-type`:
+
+| Tracker | Parameter | Algorithm | Best For |
+|---------|-----------|-----------|----------|
+| **NCC** | `ncc` | Normalized Cross-Correlation | Fixed-appearance targets (default, recommended) |
+| **Optical Flow** | `optical_flow` | Lucas-Kanade Sparse Optical Flow | Smooth continuous motion |
+| **CSRT** | `csrt` | Discriminative Correlation Filter | Deformable targets, partial occlusion |
+
+**NCC Tracker** (Default, Recommended)
+- **Algorithm**: Template matching using `cv2.TM_CCOEFF_NORMED` (normalized correlation coefficient)
+- **Pros**: Fast, highly accurate for fixed-appearance objects, more stable trajectory extraction
+- **Cons**: Sensitive to rotation/scale changes
+- **Best for**: Puzzle game videos where player icons have fixed appearance (our main use case)
+
+**Optical Flow Tracker**
+- **Algorithm**: Lucas-Kanade pyramid optical flow tracking feature points
+- **Pros**: Handles continuous motion well, computationally efficient
+- **Cons**: May drift over long sequences, requires good feature points
+- **Best for**: Smooth trajectory videos with gradual movements
+
+**CSRT Tracker**
+- **Algorithm**: Channel and Spatial Reliability Tracking (OpenCV built-in)
+- **Pros**: Robust to partial occlusion and deformation
+- **Cons**: May occasionally lose target in maze environments (e.g., Sokoban), slower, requires `opencv-contrib-python`
+- **Best for**: General-purpose tracking with appearance changes
+
+> **📝 Note on Paper Reproduction**: The results in our paper were obtained using **CSRT tracker**. If you want to exactly reproduce the paper results, use `--tracker-type csrt`. However, we recommend **NCC tracker** for general use as it provides more stable and accurate trajectory extraction in puzzle game scenarios.
+
+**Usage Examples**:
+
+```bash
+# Use default NCC tracker （default search margin 50px）
+python evaluation/videomodel_eval/batch_evaluate.py DATASET OUTPUT RESULT
+
+# Use NCC with full-image search
+python evaluation/videomodel_eval/batch_evaluate.py DATASET OUTPUT RESULT \
+  --tracker-type ncc --search-margin 0
+
+# Use optical flow tracker
+python evaluation/videomodel_eval/batch_evaluate.py DATASET OUTPUT RESULT \
+  --tracker-type optical_flow
+
+# Use CSRT tracker
+python evaluation/videomodel_eval/batch_evaluate.py DATASET OUTPUT RESULT \
+  --tracker-type csrt
 ```
 
 ### VLMs (planning/action reasoning)

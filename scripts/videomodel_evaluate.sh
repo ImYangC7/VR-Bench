@@ -16,8 +16,8 @@ NUM_SAMPLES=1000
 THRESHOLD=0.05
 FIDELITY_PIXEL_THRESHOLD=5
 FRAME_STEP=1
-TRACKER_TYPE=template  # 追踪器类型: csrt, template, optical_flow
-SEARCH_MARGIN=50       # 模板匹配搜索边距（0=全图搜索，>0=局部搜索范围）
+TRACKER_TYPE=ncc       # 追踪器类型: csrt, ncc, optical_flow
+SEARCH_MARGIN=50       # NCC追踪器搜索边距（0=全图搜索，>0=局部搜索范围）
 USE_GPU=gpu
 
 # 构建Python命令

@@ -13,7 +13,7 @@ from concurrent.futures import ProcessPoolExecutor, as_completed
 from typing import Dict, Any, Tuple
 
 from core.schema import UnifiedState
-from evaluation.videomodel_eval.extractor import TrajectoryExtractor
+from evaluation.videomodel_eval.extractor import CSRTTracker
 from evaluation.videomodel_eval.evaluator import TrajectoryEvaluator
 from evaluation.videomodel_eval.utils import (
     get_video_info,
@@ -69,7 +69,7 @@ def evaluate_single_video(args_tuple: Tuple) -> Dict[str, Any]:
         unified_w, unified_h = gen_w, gen_h
 
         # 提取 Generated 轨迹（使用 frame_step 控制采样密度）
-        gen_extractor = TrajectoryExtractor(state_file, tracker_type=tracker_type, search_margin=search_margin)
+        gen_extractor = CSRTTracker(state_file, tracker_type=tracker_type, search_margin=search_margin)
         gen_traj, gen_frame, gen_w_actual, gen_h_actual = gen_extractor.extract(
             str(gen_path),
             target_size=(unified_w, unified_h),
@@ -102,7 +102,7 @@ def evaluate_single_video(args_tuple: Tuple) -> Dict[str, Any]:
         for gt_video in gt_videos:
             try:
                 # 提取 GT 轨迹（使用 frame_step 控制采样密度）
-                gt_extractor = TrajectoryExtractor(state_file, tracker_type=tracker_type, search_margin=search_margin)
+                gt_extractor = CSRTTracker(state_file, tracker_type=tracker_type, search_margin=search_margin)
                 gt_traj, gt_frame, gt_w_actual, gt_h_actual = gt_extractor.extract(
                     gt_video,
                     target_size=(unified_w, unified_h),
@@ -242,7 +242,7 @@ def evaluate_single_video(args_tuple: Tuple) -> Dict[str, Any]:
 def evaluate_difficulty(dataset_dir: str, output_dir: str, result_dir: str,
                        threshold: float, num_samples: int, workers: int, difficulty: str,
                        fidelity_pixel_threshold: int = 5, frame_step: int = 1,
-                       tracker_type: str = 'template', search_margin: int = 50) -> Dict[str, Any]:
+                       tracker_type: str = 'ncc', search_margin: int = 50) -> Dict[str, Any]:
     """评估单个难度的所有视频"""
     dataset_path = Path(dataset_dir)
     output_path = Path(output_dir)
@@ -364,11 +364,11 @@ def main():
                         help='保真度像素差异阈值（默认5，即±5灰度值）')
     parser.add_argument('--frame-step', type=int, default=1,
                         help='轨迹采样步长（1=每帧采样，2=每2帧采样一次，默认1）')
-    parser.add_argument('--tracker-type', type=str, default='template',
-                        choices=['csrt', 'template', 'optical_flow'],
-                        help='追踪器类型（csrt=OpenCV CSRT, template=模板匹配, optical_flow=光流法，默认template）')
+    parser.add_argument('--tracker-type', type=str, default='ncc',
+                        choices=['csrt', 'ncc', 'optical_flow'],
+                        help='追踪器类型（csrt=OpenCV CSRT, ncc=归一化互相关, optical_flow=光流法，默认ncc）')
     parser.add_argument('--search-margin', type=int, default=50,
-                        help='模板匹配搜索边距（0=全图搜索，>0=局部搜索范围，默认50像素）')
+                        help='NCC追踪器搜索边距（0=全图搜索，>0=局部搜索范围，默认50像素）')
     args = parser.parse_args()
 
     # 如果指定了--gpu，设置环境变量
