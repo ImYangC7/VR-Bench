@@ -20,7 +20,7 @@ VR-Bench is a comprehensive benchmark for evaluating Vision-Language Models (VLM
 
 > If you encounter any difficulties in using or reproducing the code, please contact me directly (Email: iamyangcheng7@gmail.com, Wechat: 19883175660). The parameter settings during the evaluation process and the selection of crackers will affect the evaluation results.
 
-![](https://raw.githubusercontent.com/ImYangC7/Repo-recorder/main/generated/ImYangC7__VR-Bench_status.svg)
+![](https://raw.githubusercontent.com/ImYangC7/Repo-recorder/main/generated/FoundationAgents__VR-Bench_status.svg)
 
 ## 🎊 News
 
