@@ -334,10 +334,10 @@ If you use VR-Bench in your research, please cite:
 
 ```bibtex
 @article{yang2025vrbench,
-      title={Reasoning via Video: The First Evaluation of Video Models' Reasoning Abilities through Maze-Solving Tasks}, 
-      author={Cheng Yang and Haiyuan Wan and Yiran Peng and Xin Cheng and Zhaoyang Yu and Jiayi Zhang and Junchi Yu and Xinlei Yu and Xiawu Zheng and Dongzhan Zhou and Chenglin Wu},
-      journal={arXiv preprint arXiv:2511.15065},
-      year={2025}
+  title={Reasoning via Video: The First Evaluation of Video Models' Reasoning Abilities through Maze-Solving Tasks},
+  author={Cheng Yang and Haiyuan Wan and Yiran Peng and Xin Cheng and Zhaoyang Yu and Jiayi Zhang and Junchi Yu and Xinlei Yu and Xiawu Zheng and Dongzhan Zhou and Chenglin Wu},
+  journal={arXiv preprint arXiv:2511.15065},
+  year={2025}
 }
 ```
 
