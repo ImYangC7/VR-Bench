@@ -4,6 +4,6 @@
   "visual_description": {
     "start": "green circle",
     "end": "red circle",
-    "road": "white square"
+    "road": "white"
   }
 }
