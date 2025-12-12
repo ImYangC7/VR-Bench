@@ -18,12 +18,14 @@
 
 VR-Bench is a comprehensive benchmark for evaluating Vision-Language Models (VLMs) on spatial reasoning and planning tasks through various puzzle games. It provides a unified framework for dataset generation, evaluation, and analysis.
 
-> If you encounter any difficulties in using or reproducing the code, please contact me directly (Email: iamyangcheng7@gmail.com, Wechat: 19883175660). The parameter settings during the evaluation process and the selection of crackers will affect the evaluation results.
+> If you encounter any difficulties in using or reproducing the code, please contact me directly (Email: iamyangcheng7@gmail.com, Wechat: Forever_1k). The parameter settings during the evaluation process and the selection of crackers will affect the evaluation results.
 
 ![](https://raw.githubusercontent.com/ImYangC7/Repo-recorder/main/generated/FoundationAgents__VR-Bench_status.svg)
 
 ## 🎊 News
 
+- [2025.12.11] We have added dynamic prompt templates for video models, as well as the `metadata.csv` generator script `generate_metadata.py` in the prompts folder. Please refer to [PR #10](https://github.com/FoundationAgents/VR-Bench/pull/10).
+- [2025.12.10] We have added a dynamic prompt template for VLM that supports adaptation to different skins. Please refer to [PR #9](https://github.com/FoundationAgents/VR-Bench/pull/9).
 - [2025.12.03] Refactored tracker code for improved standardization and added comprehensive tracker documentation (NCC, Optical Flow, CSRT) with usage examples.
 > **📝 Note on Paper Reproduction**: The results in our paper were obtained using **CSRT tracker**. If you want to exactly reproduce the paper results, use `--tracker-type csrt`. However, we recommend **NCC tracker** for general use as it provides more stable and accurate trajectory extraction in puzzle game scenarios.
 - [2025.11.26] We apologize for the earlier omission. We have now added all our current maze textures to the skin folder to enable normal generation. In future releases, we will use nanobanana to support automatic skin generation. Please follow our updates.

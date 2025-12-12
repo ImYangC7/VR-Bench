@@ -18,10 +18,12 @@
 
 VR-Bench 是一个综合基准，用于通过多种益智游戏评估视觉语言模型（VLM）在空间推理与规划任务上的能力，提供统一的数据生成、评估与分析框架。
 
-> 如果在使用或复现过程中遇到问题，可直接联系我（Email: iamyangcheng7@gmail.com，微信: 19883175660）。评估时的参数选择与破题策略会影响结果。
+> 如果在使用或复现过程中遇到问题，可直接联系我（Email: iamyangcheng7@gmail.com，微信: Forever_1k）。评估时的参数选择与破题策略会影响结果。
 
 ## 🎊 动态
 
+- [2025.12.11] 我们为视频模型新增了动态提示词模板，同时在 prompts 目录下添加了用于生成 `metadata.csv` 文件的脚本 `generate_metadata.py`。更多详情请参考 [PR #10](https://github.com/FoundationAgents/VR-Bench/pull/10)
+- [2025.12.10] 我们新增了一款 VLM 的动态提示词模板，该模板可适配不同的皮肤。更多详情请参考 [PR #9](https://github.com/FoundationAgents/VR-Bench/pull/9)
 - [2025.12.03] 重构追踪器代码，提升代码规范性，并在 README 中补充了追踪器详细说明（NCC、Flow、CSRT）及使用示例。
 - [2025.11.26] 抱歉此前遗漏了皮肤素材，现已补全并放入 skins 目录，方便正常生成。后续版本将用 nanobanana 支持自动皮肤生成，敬请关注。
 - [2025.11.24] 发布用于训练 Wan-R1 的脚本与配置。
