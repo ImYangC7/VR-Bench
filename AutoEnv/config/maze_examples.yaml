@@ -1,0 +1,142 @@
+# ============================================================
+# Maze Skin Generation - Configuration Examples
+# ============================================================
+# Copy one of these examples to env_skin_gen.yaml to use it
+
+# Required settings
+model: "claude-4-5-haiku"
+image_model: "gemini-2.5-flash-image"
+envs_root_path: "workspace/envs"
+
+# ============================================================
+# Example 1: Classic Maze - Cyberpunk Style
+# ============================================================
+# maze_type: "maze"
+# theme: "cyberpunk neon city with glowing walls and electric blue lights"
+
+# ============================================================
+# Example 2: Classic Maze - Medieval Castle
+# ============================================================
+# maze_type: "maze"
+# theme: "medieval stone castle dungeon with torches and moss"
+
+# ============================================================
+# Example 3: Classic Maze - Pixel Art
+# ============================================================
+# maze_type: "maze"
+# theme: "16-bit pixel art retro game with vibrant colors"
+
+# ============================================================
+# Example 4: Pathfinder - Candy Land
+# ============================================================
+# maze_type: "pathfinder"
+# theme: "candy land with colorful sweets and lollipops"
+
+# ============================================================
+# Example 5: Pathfinder - Sci-Fi Space Station
+# ============================================================
+# maze_type: "pathfinder"
+# theme: "sci-fi space station with metallic corridors and holographic displays"
+
+# ============================================================
+# Example 6: Pathfinder - Forest Path
+# ============================================================
+# maze_type: "pathfinder"
+# theme: "lush forest with moss-covered stones and wooden bridges"
+
+# ============================================================
+# Example 7: Sokoban - Industrial Warehouse
+# ============================================================
+# maze_type: "sokoban"
+# theme: "industrial warehouse with wooden crates and concrete floors"
+
+# ============================================================
+# Example 8: Sokoban - Zen Garden
+# ============================================================
+# maze_type: "sokoban"
+# theme: "zen garden with stone blocks and raked sand patterns"
+
+# ============================================================
+# Example 9: Sokoban - Ice Palace
+# ============================================================
+# maze_type: "sokoban"
+# theme: "frozen ice palace with crystal blocks and snow"
+
+# ============================================================
+# Example 10: Trapfield - Lava Dungeon
+# ============================================================
+# maze_type: "trapfield"
+# theme: "lava dungeon with fire traps and molten rock"
+
+# ============================================================
+# Example 11: Trapfield - Frozen Tundra
+# ============================================================
+# maze_type: "trapfield"
+# theme: "frozen tundra with ice hazards and snow storms"
+
+# ============================================================
+# Example 12: Trapfield - Ancient Temple
+# ============================================================
+# maze_type: "trapfield"
+# theme: "ancient temple with spike traps and crumbling stone"
+
+# ============================================================
+# Example 13: Maze - Horror Theme
+# ============================================================
+# maze_type: "maze"
+# theme: "abandoned hospital with blood stains and flickering lights"
+
+# ============================================================
+# Example 14: Pathfinder - Underwater
+# ============================================================
+# maze_type: "pathfinder"
+# theme: "underwater coral reef with colorful fish and seaweed"
+
+# ============================================================
+# Example 15: Sokoban - Toy Room
+# ============================================================
+# maze_type: "sokoban"
+# theme: "toy room with colorful building blocks and playful design"
+
+# ============================================================
+# Example 16: Trapfield - Alien Planet
+# ============================================================
+# maze_type: "trapfield"
+# theme: "alien planet surface with toxic pools and strange vegetation"
+
+# ============================================================
+# Example 17: Maze - Steampunk
+# ============================================================
+# maze_type: "maze"
+# theme: "steampunk factory with brass gears and steam pipes"
+
+# ============================================================
+# Example 18: Pathfinder - Desert Oasis
+# ============================================================
+# maze_type: "pathfinder"
+# theme: "desert oasis with sand dunes and palm trees"
+
+# ============================================================
+# Example 19: Sokoban - Library
+# ============================================================
+# maze_type: "sokoban"
+# theme: "ancient library with book stacks and wooden shelves"
+
+# ============================================================
+# Example 20: Trapfield - Volcano
+# ============================================================
+# maze_type: "trapfield"
+# theme: "active volcano with lava flows and ash clouds"
+
+# ============================================================
+# Custom Theme Template
+# ============================================================
+# Create your own theme by describing:
+# 1. Setting/Environment (e.g., "cyberpunk city", "medieval castle")
+# 2. Key Visual Elements (e.g., "neon lights", "stone walls")
+# 3. Atmosphere (e.g., "dark and moody", "bright and colorful")
+# 4. Art Style (optional, e.g., "pixel art", "hand-drawn", "3D rendered")
+
+# maze_type: "maze"  # or pathfinder, sokoban, trapfield
+# theme: "your custom theme description here"
+

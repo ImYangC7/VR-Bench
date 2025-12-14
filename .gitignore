@@ -100,3 +100,6 @@ Thumbs.db
 #dataset
 dataset_VR
 dataset_output/
+
+# AutoEnv workspace (generated assets and costs)
+AutoEnv/workspace/
