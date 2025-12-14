@@ -22,6 +22,7 @@ VR-Bench 是一个综合基准，用于通过多种益智游戏评估视觉语�
 
 ## 🎊 动态
 
+- [2025.12.14] 🎨 **发布 AutoEnv-SkinGen**：AI 驱动的迷宫游戏皮肤生成管道！可生成无限主题皮肤并自动生成视觉描述。详见 [AutoEnv 文档](AutoEnv/README.md)。
 - [2025.12.11] 我们为视频模型新增了动态提示词模板，同时在 prompts 目录下添加了用于生成 `metadata.csv` 文件的脚本 `generate_metadata.py`。更多详情请参考 [PR #10](https://github.com/FoundationAgents/VR-Bench/pull/10)
 - [2025.12.10] 我们新增了一款 VLM 的动态提示词模板，该模板可适配不同的皮肤。更多详情请参考 [PR #9](https://github.com/FoundationAgents/VR-Bench/pull/9)
 - [2025.12.03] 重构追踪器代码，提升代码规范性，并在 README 中补充了追踪器详细说明（NCC、Flow、CSRT）及使用示例。
@@ -272,15 +273,38 @@ VR-Bench/
 
 ## 🎨 自定义纹理
 
-1. 在 `skins/<game_name>/` 下创建新文件夹  
-2. 添加所需纹理（PNG/JPG）  
-3. 在配置中指定皮肤路径  
+### 手动创建
 
-各游戏示例：
+1. 在 `skins/<game_name>/` 下创建新文件夹
+2. 添加所需纹理（PNG/JPG）
+3. 在配置中指定皮肤路径
+
+**各游戏纹理要求：**
 - Maze：wall, floor, player, goal
 - Sokoban：wall, floor, player, box, target
 - PathFinder：自定义背景与路径纹理
 - TrapField：floor, trap, player, goal
+
+### AI 自动生成（AutoEnv）
+
+**新功能！** 使用 AutoEnv 通过 AI 自动生成主题皮肤：
+
+```bash
+cd AutoEnv
+python run_skin_generation.py \
+  --maze-type maze \
+  --theme "赛博朋克霓虹城市"
+```
+
+**功能特性：**
+- 🎨 从自然语言描述生成皮肤
+- 🤖 使用视觉模型自动生成视觉描述
+- 🖼️ 透明 PNG 并自动裁剪
+- 💰 实时成本追踪
+
+**输出位置：** `AutoEnv/workspace/envs/<game_type>_<timestamp>/skins/`
+
+详见 [AutoEnv 文档](AutoEnv/README.md)。
 
 ## 🔬 添加新游戏
 

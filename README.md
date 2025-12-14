@@ -24,6 +24,7 @@ VR-Bench is a comprehensive benchmark for evaluating Vision-Language Models (VLM
 
 ## 🎊 News
 
+- [2025.12.14] 🎨 **Released AutoEnv-SkinGen**: AI-powered skin generation pipeline for maze-type games! Generate unlimited themed skins with automatic visual descriptions. See [AutoEnv Documentation](AutoEnv/README.md).
 - [2025.12.11] We have added dynamic prompt templates for video models, as well as the `metadata.csv` generator script `generate_metadata.py` in the prompts folder. Please refer to [PR #10](https://github.com/FoundationAgents/VR-Bench/pull/10).
 - [2025.12.10] We have added a dynamic prompt template for VLM that supports adaptation to different skins. Please refer to [PR #9](https://github.com/FoundationAgents/VR-Bench/pull/9).
 - [2025.12.03] Refactored tracker code for improved standardization and added comprehensive tracker documentation (NCC, Optical Flow, CSRT) with usage examples.
@@ -283,6 +284,8 @@ VR-Bench/
 
 ## 🎨 Custom Textures
 
+### Manual Creation
+
 Each game supports custom texture skins for visual variety:
 
 1. Create a new folder under `skins/<game_name>/`
@@ -291,12 +294,33 @@ Each game supports custom texture skins for visual variety:
 
 Required texture files vary by game. Refer to existing skin folders for examples.
 
-### Texture Requirements by Game
+**Texture Requirements by Game:**
 
 - **Maze**: wall, floor, player, goal
 - **Sokoban**: wall, floor, player, box, target
 - **PathFinder**: Custom background and path textures
 - **TrapField**: floor, trap, player, goal
+
+### AI-Powered Generation (AutoEnv)
+
+**NEW!** Use AutoEnv to automatically generate themed skins with AI:
+
+```bash
+cd AutoEnv
+python run_skin_generation.py \
+  --maze-type maze \
+  --theme "cyberpunk neon city"
+```
+
+**Features:**
+- 🎨 Generate skins from natural language descriptions
+- 🤖 Automatic visual descriptions using vision models
+- 🖼️ Transparent PNG with auto-cropping
+- 💰 Real-time cost tracking
+
+**Output:** Ready-to-use skins in `AutoEnv/workspace/envs/<game_type>_<timestamp>/skins/`
+
+See [AutoEnv Documentation](AutoEnv/README.md) for details.
 
 ## 🔬 Adding New Games
 
