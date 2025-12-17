@@ -245,7 +245,7 @@ bash scripts/run_vlm_eval.sh
 - **SR (Success Rate)**: Whether the generated trajectory (player or box for Sokoban) enters the goal bounding box at least once.
 - **SD (Step Deviation)**: Relative path-length overrun vs GT (`len_gen / len_gt - 1`), only defined when SR=1 and non-negative.
 - **EM (Exact Match)**: Perfect flag (1/0) when PR exceeds a threshold and |SD| is small, conditioned on SR=1.
-- **MF (Mask Fidelity)**: Background stability score [0,1]; compares sampled frames to the first frame while masking start/goal/player regions.
+- **MF (Maze Fidelity)**: Background stability score [0,1]; compares sampled frames to the first frame while masking start/goal/player regions.
 
 
 ## 🔧 Configuration

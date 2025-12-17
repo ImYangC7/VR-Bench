@@ -215,7 +215,7 @@ bash scripts/run_vlm_eval.sh
 - **SR（Success Rate）**：生成轨迹（推箱子时用箱子/玩家轨迹）是否至少一次进入目标框  
 - **SD（Step Deviation）**：路径长度相对超长比 `len_gen / len_gt - 1`，仅在 SR=1 且非负时定义  
 - **EM（Exact Match）**：当 PR 超阈值且 |SD| 足够小时（且 SR=1）记为 1，否则为 0  
-- **MF（Mask Fidelity）**：背景稳定度 [0,1]；比较采样帧与首帧（遮住起点/终点/玩家区域）衡量背景变化  
+- **MF（Maze Fidelity）**：背景稳定度 [0,1]；比较采样帧与首帧（遮住起点/终点/玩家区域）衡量背景变化  
 
 ## 🧪 评测
 
