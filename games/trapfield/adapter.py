@@ -70,7 +70,7 @@ class TrapFieldAdapter(GameAdapter):
         level: Any,
         output_dir: Path,
         level_id: int,
-        difficulty: str,
+        difficulty_name: str,
         **kwargs
     ) -> Dict[str, str]:
         """
@@ -80,7 +80,7 @@ class TrapFieldAdapter(GameAdapter):
             level: 关卡数据（网格）
             output_dir: 输出目录
             level_id: 关卡ID
-            difficulty: 难度
+            difficulty_name: 难度名称
             **kwargs: 额外参数（fps, add_grid等）
         
         Returns:
@@ -99,9 +99,9 @@ class TrapFieldAdapter(GameAdapter):
         images_dir.mkdir(parents=True, exist_ok=True)
         
         # 文件名
-        state_filename = f'{difficulty}_{level_id:04d}.json'
-        video_filename = f'{difficulty}_{level_id:04d}.mp4'
-        image_filename = f'{difficulty}_{level_id:04d}.png'
+        state_filename = f'{difficulty_name}_{level_id:04d}.json'
+        video_filename = f'{difficulty_name}_{level_id:04d}.mp4'
+        image_filename = f'{difficulty_name}_{level_id:04d}.png'
         
         state_path = states_dir / state_filename
         video_path = videos_dir / video_filename
@@ -139,20 +139,9 @@ class TrapFieldAdapter(GameAdapter):
             state.save(str(state_path))
             result['state'] = state_filename
             
-            # 生成视频
-            try:
-                path = solve_trapfield(grid)
-                
-                if path:
-                    # 生成视频
-                    create_solution_video(
-                        grid,
-                        path,
-                        cell_size=64,
-                        save_path=str(video_path),
-                        frame_duration_ms=300,
-                        assets_folder=assets_folder
-                    )
+            # 使用generate_video方法生成视频
+            if result['state']:
+                if self.generate_video(str(state_path), str(video_path), assets_folder=assets_folder):
                     result['video'] = video_filename
                     
                     # 从视频提取第一帧作为图片
@@ -165,25 +154,19 @@ class TrapFieldAdapter(GameAdapter):
                             result['image'] = image_filename
                         except Exception as e:
                             logging.warning(f"Failed to extract first frame: {e}")
-                            # 如果提取失败，直接渲染静态图片
-                            renderer = TrapFieldRenderer(assets_folder=assets_folder, cell_size=64)
-                            renderer.render_grid(grid, str(image_path))
-                            result['image'] = image_filename
                     else:
                         # 如果没有 imageio，直接渲染静态图片
                         renderer = TrapFieldRenderer(assets_folder=assets_folder, cell_size=64)
                         renderer.render_grid(grid, str(image_path))
                         result['image'] = image_filename
-                        
-            except Exception as e:
-                logging.warning(f"Failed to create video: {e}")
-                # 如果视频生成失败，至少保存静态图片
-                try:
-                    renderer = TrapFieldRenderer(assets_folder=assets_folder, cell_size=64)
-                    renderer.render_grid(grid, str(image_path))
-                    result['image'] = image_filename
-                except Exception as e2:
-                    logging.error(f"Failed to create image: {e2}")
+                else:
+                    # 如果视频生成失败，至少保存静态图片
+                    try:
+                        renderer = TrapFieldRenderer(assets_folder=assets_folder, cell_size=64)
+                        renderer.render_grid(grid, str(image_path))
+                        result['image'] = image_filename
+                    except Exception as e2:
+                        logging.error(f"Failed to create image: {e2}")
         
         except Exception as e:
             logging.error(f"Failed to save level: {e}")
@@ -218,4 +201,42 @@ class TrapFieldAdapter(GameAdapter):
         """
         level_hash = self.get_level_hash(level)
         return level_hash in existing_hashes
+    
+    def generate_video(
+        self,
+        state_path: str,
+        output_path: str,
+        assets_folder: Optional[str] = None,
+        **kwargs
+    ) -> bool:
+        """从state文件生成视频"""
+        try:
+            from core.schema import UnifiedState
+            from generation.path_finder import find_optimal_paths
+            
+            state = UnifiedState.load(state_path)
+            paths = find_optimal_paths(state, 'trapfield')
+            
+            if not paths:
+                logging.warning(f"No solution path found for {state_path}")
+                return False
+            
+            path = paths[0]  # 使用第一条最优路径
+            
+            if not assets_folder:
+                assets_folder = str(Path(__file__).parent / 'assets')
+            
+            create_solution_video(
+                state.grid.data,
+                path,
+                cell_size=state.render.cell_size,
+                save_path=output_path,
+                frame_duration_ms=kwargs.get('frame_duration_ms', 300),
+                assets_folder=assets_folder
+            )
+            
+            return Path(output_path).exists()
+        except Exception as e:
+            logging.error(f"Failed to generate TrapField video: {e}")
+            return False
 

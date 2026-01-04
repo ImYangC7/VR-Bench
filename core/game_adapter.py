@@ -115,6 +115,28 @@ class GameAdapter(ABC):
         """
         return []
     
+    @abstractmethod
+    def generate_video(
+        self,
+        state_path: str,
+        output_path: str,
+        assets_folder: Optional[str] = None,
+        **kwargs
+    ) -> bool:
+        """
+        从state文件生成视频
+        
+        Args:
+            state_path: 状态文件路径
+            output_path: 输出视频路径
+            assets_folder: 素材文件夹路径
+            **kwargs: 其他参数（如fps等）
+            
+        Returns:
+            True 如果成功，False 如果失败
+        """
+        pass
+    
     def cleanup(self):
         """清理资源（可选）"""
         pass

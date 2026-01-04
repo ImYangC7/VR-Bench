@@ -85,31 +85,6 @@ class PathFinderAdapter(GameAdapter):
         }
 
         try:
-            # 生成视频
-            try:
-                # PathFinder 使用自己的 fps 配置（constants.py 中的 FRAMES_PER_SECOND）
-                # 忽略外部传入的 fps 参数
-                video_result = render_solution_video(
-                    level,
-                    str(video_path),
-                    assets_folder=assets_folder  # 传递纹理文件夹
-                )
-
-                if video_result:
-                    result['video'] = video_filename
-
-                    # 从视频提取第一帧作为图片
-                    try:
-                        reader = imageio.get_reader(str(video_path))
-                        first_frame = reader.get_data(0)
-                        reader.close()
-                        imageio.imwrite(str(image_path), first_frame)
-                        result['image'] = image_filename
-                    except Exception as e:
-                        logging.warning(f"Failed to extract first frame: {e}")
-            except Exception as e:
-                logging.warning(f"Failed to create video: {e}")
-
             # 保存状态文件（使用 UnifiedState 格式）
             try:
                 # PathFinder 使用像素坐标系统
@@ -148,6 +123,21 @@ class PathFinderAdapter(GameAdapter):
             except Exception as e:
                 logging.warning(f"Failed to save state: {e}")
 
+            # 使用generate_video方法生成视频
+            if result['state']:
+                if self.generate_video(str(state_path), str(video_path), assets_folder=assets_folder):
+                    result['video'] = video_filename
+
+                    # 从视频提取第一帧作为图片
+                    try:
+                        reader = imageio.get_reader(str(video_path))
+                        first_frame = reader.get_data(0)
+                        reader.close()
+                        imageio.imwrite(str(image_path), first_frame)
+                        result['image'] = image_filename
+                    except Exception as e:
+                        logging.warning(f"Failed to extract first frame: {e}")
+
         except Exception as e:
             logging.error(f"Failed to save PathFinder level: {e}")
 
@@ -177,4 +167,78 @@ class PathFinderAdapter(GameAdapter):
         """返回需要的纹理文件"""
         # PathFinder 需要：起点、终点、道路纹理
         return ['start', 'end', 'road']
+    
+    def generate_video(
+        self,
+        state_path: str,
+        output_path: str,
+        assets_folder: Optional[str] = None,
+        **kwargs
+    ) -> bool:
+        """从state文件生成视频"""
+        try:
+            from core.schema import UnifiedState
+            from generation.path_finder import find_optimal_paths
+            from .board import PathFinderBoard, PathSegment
+            
+            state = UnifiedState.load(state_path)
+            paths = find_optimal_paths(state, 'pathfinder')
+            
+            if not paths:
+                logging.warning(f"No solution path found for {state_path}")
+                return False
+            
+            node_path, _ = paths[0]  # 使用第一条最优路径
+            
+            segments_data = state.metadata.get('segments', [])
+            road_width = state.metadata.get('road_width', 35)
+            board_size = state.render.image_width if hasattr(state.render, 'image_width') else 800
+            
+            segments = []
+            for segment_data in segments_data:
+                if len(segment_data) >= 2:
+                    segments.append(PathSegment(segment_data))
+            
+            start_point = state.player.pixel_pos if state.player.pixel_pos else (0, 0)
+            end_point = state.goal.pixel_pos if state.goal.pixel_pos else (0, 0)
+            
+            solution_path_tuples = [(node.x, node.y) for node in node_path]
+            
+            solution_segments = []
+            segment_map = {}
+            for idx, segment in enumerate(segments_data):
+                if len(segment) < 2:
+                    continue
+                p1, p2 = tuple(segment[0]), tuple(segment[-1])
+                segment_map[(p1, p2)] = idx
+                segment_map[(p2, p1)] = idx
+            
+            for i in range(len(node_path) - 1):
+                node1, node2 = node_path[i], node_path[i + 1]
+                edge = ((node1.x, node1.y), (node2.x, node2.y))
+                if edge in segment_map:
+                    solution_segments.append(segment_map[edge])
+            
+            board = PathFinderBoard(
+                segments=segments,
+                start_point=start_point,
+                end_point=end_point,
+                solution_segments=solution_segments,
+                solution_path=solution_path_tuples,
+                image_size=board_size,
+                road_width=road_width
+            )
+            
+            render_solution_video(
+                board, 
+                output_path, 
+                fps=kwargs.get('fps', 24),
+                use_gpu=True,
+                assets_folder=assets_folder
+            )
+            
+            return Path(output_path).exists()
+        except Exception as e:
+            logging.error(f"Failed to generate PathFinder video: {e}")
+            return False
 
