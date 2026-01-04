@@ -96,30 +96,20 @@ class MazeAdapter(GameAdapter):
         try:
             # 获取素材文件夹和原始 maze 数据
             assets_folder = getattr(level, '_assets_folder', None)
-            maze_data = getattr(level, 'data', level)  # 如果是包装类，获取 data；否则直接使用
+            maze_data = getattr(level, 'data', level)
 
-            # 生成视频
+            # 保存状态文件
             try:
-                from games.maze.utils import maze_utils
-                import random
-                import imageio
+                save_state(maze_data, str(state_path))
+                result['state'] = state_filename
+            except Exception as e:
+                logging.warning(f"Failed to save state: {e}")
 
-                # 使用 DFS 求解
-                solver_rng = random.Random(level_id)
-                path = maze_utils.dfs_solve_maze(maze_data, [], rng=solver_rng)
-
-                if path:
-                    # 生成视频
-                    create_solution_video(
-                        maze_data,
-                        path,
-                        cell_size=64,
-                        save_path=str(video_path),
-                        frame_duration_ms=300,
-                        assets_folder=assets_folder
-                    )
+            # 使用generate_video方法生成视频
+            if result['state']:
+                if self.generate_video(str(state_path), str(video_path), assets_folder=assets_folder):
                     result['video'] = video_filename
-
+                    
                     # 从视频提取第一帧作为图片
                     try:
                         reader = imageio.get_reader(str(video_path))
@@ -129,15 +119,6 @@ class MazeAdapter(GameAdapter):
                         result['image'] = image_filename
                     except Exception as e:
                         logging.warning(f"Failed to extract first frame: {e}")
-            except Exception as e:
-                logging.warning(f"Failed to create video: {e}")
-
-            # 保存状态文件
-            try:
-                save_state(maze_data, str(state_path))
-                result['state'] = state_filename
-            except Exception as e:
-                logging.warning(f"Failed to save state: {e}")
                 
         except Exception as e:
             logging.error(f"Failed to save Maze level: {e}")
@@ -168,4 +149,44 @@ class MazeAdapter(GameAdapter):
     def get_required_texture_files(self) -> list:
         """返回需要的纹理文件"""
         return ['floor', 'wall', 'player', 'target']
+    
+    def generate_video(
+        self,
+        state_path: str,
+        output_path: str,
+        assets_folder: Optional[str] = None,
+        **kwargs
+    ) -> bool:
+        """从state文件生成视频"""
+        try:
+            from core.schema import UnifiedState
+            from games.maze.generators.video_gen import create_solution_video
+            from games.maze.default_textures import ensure_default_textures
+            from generation.path_finder import find_optimal_paths
+            
+            state = UnifiedState.load(state_path)
+            paths = find_optimal_paths(state, 'maze')
+            
+            if not paths:
+                logging.warning(f"No solution path found for {state_path}")
+                return False
+            
+            path = paths[0]  # 使用第一条最优路径
+            
+            if not assets_folder:
+                assets_folder = str(ensure_default_textures())
+            
+            create_solution_video(
+                state.grid.data,
+                path,
+                cell_size=state.render.cell_size,
+                save_path=output_path,
+                frame_duration_ms=kwargs.get('frame_duration_ms', 300),
+                assets_folder=assets_folder
+            )
+            
+            return Path(output_path).exists()
+        except Exception as e:
+            logging.error(f"Failed to generate Maze video: {e}")
+            return False
 

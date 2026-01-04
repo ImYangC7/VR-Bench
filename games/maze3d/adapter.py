@@ -216,10 +216,10 @@ class Maze3DAdapter(GameAdapter):
             states_dir.mkdir(parents=True, exist_ok=True)
             videos_dir.mkdir(parents=True, exist_ok=True)
 
-            # 文件名
-            image_filename = f"3d_maze_{level_id:05d}.png"
-            state_filename = f"3d_maze_{level_id:05d}.json"
-            video_filename = f"3d_maze_{level_id:05d}.mp4"
+            # 文件名（使用difficulty_name保持一致性）
+            image_filename = f"{difficulty_name}_{level_id:04d}.png"
+            state_filename = f"{difficulty_name}_{level_id:04d}.json"
+            video_filename = f"{difficulty_name}_{level_id:04d}.mp4"
 
             image_path = images_dir / image_filename
             state_path = states_dir / state_filename
@@ -320,9 +320,9 @@ class Maze3DAdapter(GameAdapter):
             state.save(str(state_path))
 
             return {
-                'image': f"images/{image_filename}",
-                'state': f"states/{state_filename}",
-                'video': f"videos/{video_filename}" if generate_video else None
+                'image': image_filename,
+                'state': state_filename,
+                'video': video_filename if generate_video else None
             }
         except Exception as e:
             logging.error(f"Failed to save 3D Maze level {level_id}: {e}")
@@ -368,6 +368,73 @@ class Maze3DAdapter(GameAdapter):
             return False
         
         return True
+    
+    def generate_video(
+        self,
+        state_path: str,
+        output_path: str,
+        assets_folder: Optional[str] = None,
+        **kwargs
+    ) -> bool:
+        """从state文件生成视频"""
+        try:
+            from core.schema import UnifiedState
+            from games.maze3d.main import Position, Ladder, PathSegment, BasePuzzleState
+            
+            state = UnifiedState.load(state_path)
+            
+            # 从metadata重建puzzle对象（使用简单的namespace）
+            class SimplePuzzle:
+                def __init__(self, **kwargs):
+                    for key, value in kwargs.items():
+                        setattr(self, key, value)
+            
+            grid_size = tuple(state.metadata['grid_size'])
+            cubes = [Position(*pos) for pos in state.metadata['cubes']]
+            start_pos = Position(*state.metadata['start_pos'])
+            goal_pos = Position(*state.metadata['goal_pos'])
+            
+            ladders = [
+                Ladder(
+                    base_pos=Position(*ladder['base_pos']),
+                    direction=ladder['direction'],
+                    height=ladder['height']
+                )
+                for ladder in state.metadata['ladders']
+            ]
+            
+            path = [
+                PathSegment(
+                    start=Position(*seg['start']),
+                    end=Position(*seg['end']),
+                    type=seg['type']
+                )
+                for seg in state.metadata['path']
+            ]
+            
+            puzzle = SimplePuzzle(
+                grid_size=grid_size,
+                cubes=cubes,
+                start_pos=start_pos,
+                goal_pos=goal_pos,
+                ladders=ladders,
+                path=path
+            )
+            
+            if not assets_folder:
+                raise ValueError("assets_folder is required for 3D Maze")
+            
+            colors = load_colors_from_skin(assets_folder)
+            
+            fps = kwargs.get('fps', 24)
+            speed = kwargs.get('speed', 2.0)
+            
+            generate_solution_video(puzzle, output_path, fps=fps, speed=speed, colors=colors)
+            
+            return Path(output_path).exists()
+        except Exception as e:
+            logging.error(f"Failed to generate 3D Maze video: {e}")
+            return False
     
     def cleanup(self):
         """清理资源"""
