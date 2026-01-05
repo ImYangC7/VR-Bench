@@ -23,7 +23,7 @@ VR-Bench is a comprehensive benchmark for evaluating Vision-Language Models (VLM
 ![](https://raw.githubusercontent.com/ImYangC7/Repo-recorder/main/generated/FoundationAgents__VR-Bench_status.svg)
 
 ## 🎊 News
-
+- [2026.1.4] Refactored the game adapter interface to unify the solution video generation process, see [PR #14](https://github.com/FoundationAgents/VR-Bench/pull/14). We have also uploaded Wan-R1 5B trained on all mazes to [Hugging Face](https://huggingface.co/HY-Wan/Wan-R1).
 - [2025.12.14] 🎨 **Released AutoEnv-SkinGen**: AI-powered skin generation pipeline for maze-type games! Generate unlimited themed skins with automatic visual descriptions. See [AutoEnv Documentation](AutoEnv/README.md).
 - [2025.12.11] We have added dynamic prompt templates for video models, as well as the `metadata.csv` generator script `generate_metadata.py` in the prompts folder. Please refer to [PR #10](https://github.com/FoundationAgents/VR-Bench/pull/10).
 - [2025.12.10] We have added a dynamic prompt template for VLM that supports adaptation to different skins. Please refer to [PR #9](https://github.com/FoundationAgents/VR-Bench/pull/9).
